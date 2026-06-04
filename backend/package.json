@@ -17,6 +17,7 @@
     "dotenv": "^17.4.2",
     "e-commerce-app": "file:..",
     "express": "^5.2.1",
+    "inngest": "^4.5.0",
     "mongoose": "^9.6.3"
   }
 }
