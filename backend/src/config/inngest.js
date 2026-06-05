@@ -1,37 +1,50 @@
-import {Inngest} from "inngest";
-import {connectDB} from "./db.js";
-import {User} from "../models/User.js";
+import { Inngest } from "inngest";
+import { connectDB } from "./db.js";
+import { User } from "../models/user.model.js";
 
-export const inngest = new Inngest({ id: "E-commerce App" });
+export const inngest = new Inngest({
+  id: "E-commerce App",
+});
 
 const syncUser = inngest.createFunction(
-    { id: "Sync-User" },
-    { event: "clerk/user.created" },
-    async({event}) => {
-        await connectDB();
-        const {id, email_addresses, first_name, last_name, image_url} = event.data;
+  { id: "sync-user" ,
+   triggers:[{event: "clerk/user.created"}] },
+  async ({ event }) => {
+    await connectDB();
 
-        const newUser = {
-            clerkId: id,
-            email: email_addresses[0]?.email_address,
-            name: `${first_name || ''} ${last_name || ''}`,
-            imageUrl: image_url,
-            addresses: [],
-            wishList: []
-        }
+    const {
+      id,
+      email_addresses,
+      first_name,
+      last_name,
+      image_url,
+    } = event.data;
 
-        await User.create(newUser);
-    }
-)
+    const newUser = {
+      clerkId: id,
+      email: email_addresses[0]?.email_address,
+      name: `${first_name || ""} ${last_name || ""}`,
+      imageUrl: image_url,
+      addresses: [],
+      wishList: [],
+    };
 
-const  deleteUserfromDB = inngest.createFunction(
-    { id: "Delete-User" },
-    { event: "clerk/user.deleted" },
-    async({event}) => {
-        await connectDB();
-        const {id} = event.data;
-        await User.deleteOne({clerkId:id});
-    }
-)
+    await User.create(newUser);
+  }
+);
 
-export const fuction = [syncUser, deleteUserfromDB];
+const deleteUserFromDB = inngest.createFunction(
+  { id: "delete-user" ,
+  triggers:[{ event: "clerk/user.deleted" }]},
+  async ({ event }) => {
+    await connectDB();
+
+    const { id } = event.data;
+
+    await User.deleteOne({
+      clerkId: id,
+    });
+  }
+);
+
+export const functions = [syncUser, deleteUserFromDB];
