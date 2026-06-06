@@ -7,6 +7,7 @@ import { functions, inngest } from './config/inngest.js';
 import { ENV } from './config/env.js';
 import { connectDB } from './config/db.js';
 import adminRouters from './routes/admin.route.js';
+import userRoutes from './routes/user.route.js';
 
 const app = express();
 
@@ -18,6 +19,10 @@ app.use(clerkMiddleware()); //req.auth and req.session will be available in all 
 app.use("/api/inngest", serve({client:inngest, functions}));
 
 app.use("/api/admin",adminRouters);
+
+app.use("/api/users", userRoutes);
+
+
 
 app.get("/api/health", (req, res) => {
     res.status(200).json({ message: "Success" })
