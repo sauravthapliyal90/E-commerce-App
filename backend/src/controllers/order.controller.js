@@ -53,12 +53,17 @@ export async function getUserOrder(req, res) {
 
             //check if each order is reviewed
 
+            const orderIds = ordersWithReviewStatus.map((order) => order._id);
+            const reviews = await Review.find({orderId: { $in: orderids}});
+            const reviewOrderIds = new Set(reviews.map((review) => review.orderId.toString()));
+
             const ordersWithReviewStatus =await Promise.all(
                 order.map(async(order) => {
                     const review = await Review.findOne({orderId: order._id});
                     return{
                         ...order.toObject(),
-                        hasReviewed: !!review,//double bang operator
+                        hasReviewed: reviewOrderIds.has(order._id.toString()) 
+                        //!!double bang operator
                     }
                 })
             )
