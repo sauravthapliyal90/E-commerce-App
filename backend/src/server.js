@@ -8,8 +8,9 @@ import { ENV } from './config/env.js';
 import { connectDB } from './config/db.js';
 import adminRouters from './routes/admin.route.js';
 import userRoutes from './routes/user.route.js';
-import orderRoutes from './routes/orderRoutes.route.js';
-
+import orderRoutes from './routes/order.route.js';
+import reviewRoutes from './router/review.router.js'
+import productRoutes from './router/product.router.js'
 
 const app = express();
 
@@ -26,6 +27,9 @@ app.use("/api/users", userRoutes);
 
 app.use("/api/orders", orderRoutes)
 
+app.use("/api/reviews", reviewRoutes)
+
+app.use("/api/product", productRoutes)
 
 
 app.get("/api/health", (req, res) => {
