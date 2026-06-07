@@ -1,5 +1,6 @@
 import router from "express";
 import { protectRoute } from "../middleware/auth.middleware";
+import { createReview, deleteReview } from "../controllers/review.controller";
 
 const router = Router();
 
