@@ -25,16 +25,12 @@ app.use(cors({origin:ENV.CLIENT_URL, credentials:true}))
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
 app.use("/api/admin", adminRouters);
-
 app.use("/api/users", userRoutes);
-
 app.use("/api/orders", orderRoutes)
-
 app.use("/api/reviews", reviewRoutes)
-
 app.use("/api/product", productRoutes)
-
 app.use("/api/cart", cartRoutes)
+// app.use("/api/payment", )
 
 
 app.get("/api/health", (req, res) => {
