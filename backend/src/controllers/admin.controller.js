@@ -108,8 +108,8 @@ export async function getAllOrders(_, res) {
             .populate("user", "name email")
             .populate("orderItems.product",)
             .sort({ createdAt: -1 });
-
-        res.status(200).json({ orders });
+       console.log(orders);
+        res.status(200).json({message:"order fetch successfully", orders });
     } catch (error) {
         res.status(500).json({ message: "Error fetching orders", error });
     }
