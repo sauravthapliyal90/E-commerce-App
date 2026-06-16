@@ -18,21 +18,29 @@ export async function createProduct(req, res) {
         if (req.files.length > 3) {
             return res.status(400).json({ message: "Maximum 3 images are allowed" });
         }
+       
+        
 
         const uploadPromises = req.files.map((file) => {
             return cloudinary.uploader.upload(file.path, {
                 folder: "products"
             });
         })
+         
 
         const uploadResults = await Promise.all(uploadPromises);
 
-        const imageUrls = uploadresults.map(result => result.secure_url);
-
+        console.log("uploadimage",uploadResults);
+        
+       
+        const imageUrls = uploadResults.map((result) => result.secure_url);
+        
+        
+     
         const product = await Product.create({
             name,
             description,
-            price: parseFolat(price),
+            price: parseFloat(price),
             stock: parseInt(stock),
             category,
             images: imageUrls
@@ -41,6 +49,7 @@ export async function createProduct(req, res) {
         res.status(201).json({ message: "Product created successfully", product });
 
     } catch (error) {
+         console.error("CREATE PRODUCT ERROR:", error);
         res.status(500).json({ message: "Error creating product", error });
     }
 }
